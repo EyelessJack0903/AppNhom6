@@ -1,4 +1,4 @@
-package com.example.myapplaptop;
+package com.example.myapplaptop.Activity;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.myapplaptop.R;
 
 public class MainActivity extends AppCompatActivity {
 
