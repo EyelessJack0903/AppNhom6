@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "545066216486",
-    "project_id": "laptopapp-nhom6",
-    "storage_bucket": "laptopapp-nhom6.appspot.com"
+    "project_number": "386605860851",
+    "project_id": "applaptopnhom6",
+    "storage_bucket": "applaptopnhom6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:545066216486:android:9195f4f5667f324dc18ae7",
+        "mobilesdk_app_id": "1:386605860851:android:1097a8ae1f4a3e0f097486",
         "android_client_info": {
           "package_name": "com.example.myapplaptop"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBDRQJlvs79GaUOmk65wcLLFrjeE7WxbDA"
+          "current_key": "AIzaSyCV84XprAhabEYNU9isnWOPTgLuV_0sHKE"
         }
       ],
       "services": {

@@ -42,7 +42,7 @@ public class SignupActivity extends BaseActivity {
                 return;
             }
             mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(SignupActivity.this, task -> {
-                if(task.isComplete()){
+                if(task.isSuccessful()){
                     Log.i(TAG, "onComplete: ");
                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                 }else {
