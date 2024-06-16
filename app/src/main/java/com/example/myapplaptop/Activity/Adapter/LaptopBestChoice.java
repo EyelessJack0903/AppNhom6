@@ -1,6 +1,7 @@
 package com.example.myapplaptop.Activity.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.myapplaptop.Activity.DetailActivity;
 import com.example.myapplaptop.Activity.Domain.Category;
 import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.R;
@@ -59,6 +61,13 @@ public class LaptopBestChoice extends RecyclerView.Adapter<LaptopBestChoice.View
                 .load(laptop.getImage())
                 .transform(new CenterCrop(), new RoundedCorners(30))
                 .into(holder.pic);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra("object",items.get(position));
+            context.startActivity(intent);
+
+        });
     }
 
     // Phương thức để lấy tên thương hiệu từ ID_TH

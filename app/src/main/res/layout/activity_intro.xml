@@ -8,7 +8,7 @@
     tools:context=".Activity.IntroActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/pic"
         android:layout_width="wrap_content"
         android:layout_height="900dp"
         android:scaleType="fitXY"

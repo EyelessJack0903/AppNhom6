@@ -1,6 +1,8 @@
 package com.example.myapplaptop.Activity.Domain;
 
-public class Laptops {
+import java.io.Serializable;
+
+public class Laptops implements Serializable {
 
     private int ID_Laptop;
     private int ID_LM;
