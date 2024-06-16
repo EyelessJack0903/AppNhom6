@@ -1,12 +1,10 @@
 package com.example.myapplaptop.Activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +20,7 @@ import java.util.Locale;
 public class DetailActivity extends BaseActivity {
     ActivityDetailBinding binding;
     private Laptops object;
-    private int num=1;
+    private int num = 1;
 
     private int quantity = 0;
     private TextView numTxt, totalAmountTxt, descriptionTxt, toggleButton;
@@ -41,7 +39,6 @@ public class DetailActivity extends BaseActivity {
         getIntentExtra();
         setVariable();
 
-
         // Enable edge-to-edge layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,13 +48,11 @@ public class DetailActivity extends BaseActivity {
 
         // Initialize views
         numTxt = findViewById(R.id.numTxt);
-        totalAmountTxt = findViewById(R.id.textView7);
+        totalAmountTxt = findViewById(R.id.totalTxt);
         descriptionTxt = findViewById(R.id.descriptionTxt);
         toggleButton = findViewById(R.id.toggleButton);
 
         // Set click listeners for buttons
-        findViewById(R.id.minusBtn).setOnClickListener(v -> updateQuantity(false));
-        findViewById(R.id.textView6).setOnClickListener(v -> updateQuantity(true));
         findViewById(R.id.minusBtn).setOnClickListener(v -> updateQuantity(false));
         findViewById(R.id.textView6).setOnClickListener(v -> updateQuantity(true));
         findViewById(R.id.addBtn).setOnClickListener(v -> addToCart());
@@ -71,16 +66,16 @@ public class DetailActivity extends BaseActivity {
                 .load(object.getImage())
                 .into(binding.pic);
 
-        binding.priceText.setText("đ"+object.getPrice());
+        binding.priceText.setText(formatCurrency(object.getPrice()));
         binding.titleTxt.setText(object.getName());
         binding.descriptionTxt.setText(object.getDescription());
-        binding.rateTxt.setText(object.getStar() + "Rating");
+        binding.rateTxt.setText(object.getStar() + " Rating");
         binding.ratingBar.setRating((float) object.getStar());
-        binding.totalTxt.setText((num * object.getPrice() + "đ"));
+        binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
     }
 
     private void getIntentExtra() {
-        object= (Laptops) getIntent().getSerializableExtra("object");
+        object = (Laptops) getIntent().getSerializableExtra("object");
     }
 
     // Update product quantity
@@ -98,10 +93,8 @@ public class DetailActivity extends BaseActivity {
 
     // Update total amount
     private void updateTotalAmount() {
-        int price = 28890000; // price in VND
-        int totalAmount = price * quantity;
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        totalAmountTxt.setText(currencyFormat.format(totalAmount));
+        double totalAmount = object.getPrice() * quantity;
+        totalAmountTxt.setText(formatCurrency(totalAmount));
     }
 
     // Add product to cart
@@ -118,5 +111,11 @@ public class DetailActivity extends BaseActivity {
             descriptionTxt.setMaxLines(3);
             toggleButton.setText("Xem thêm");
         }
+    }
+
+    // Format number as currency in VND
+    private String formatCurrency(double amount) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return currencyFormat.format(amount);
     }
 }
