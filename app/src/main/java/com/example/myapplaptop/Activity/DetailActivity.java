@@ -11,8 +11,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplaptop.Activity.Domain.Laptops;
+import com.example.myapplaptop.Activity.Domain.Specifications;
 import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivityDetailBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -21,9 +27,8 @@ public class DetailActivity extends BaseActivity {
     ActivityDetailBinding binding;
     private Laptops object;
     private int num = 1;
-
-    private int quantity = 0;
-    private TextView numTxt, totalAmountTxt, descriptionTxt, toggleButton;
+    private int quantity = 1;
+    private TextView numTxt, totalAmountTxt, descriptionTxt, toggleButton, specsTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +56,22 @@ public class DetailActivity extends BaseActivity {
         totalAmountTxt = findViewById(R.id.totalTxt);
         descriptionTxt = findViewById(R.id.descriptionTxt);
         toggleButton = findViewById(R.id.toggleButton);
+        specsTxt = findViewById(R.id.specsTxt);
+
+        // Set initial quantity text
+        numTxt.setText(String.valueOf(quantity));
+
+        // Set initial total amount
+        updateTotalAmount();
 
         // Set click listeners for buttons
         findViewById(R.id.minusBtn).setOnClickListener(v -> updateQuantity(false));
         findViewById(R.id.textView6).setOnClickListener(v -> updateQuantity(true));
         findViewById(R.id.addBtn).setOnClickListener(v -> addToCart());
         toggleButton.setOnClickListener(v -> toggleDescription());
+
+        // Fetch and display technical specifications
+        fetchSpecifications();
     }
 
     private void setVariable() {
@@ -117,5 +132,38 @@ public class DetailActivity extends BaseActivity {
     private String formatCurrency(double amount) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         return currencyFormat.format(amount);
+    }
+
+    // Fetch specifications from Firebase and display them
+    private void fetchSpecifications() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference specsRef = database.getReference("thongso").child(String.valueOf(object.getID_Laptop()));
+
+        specsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Specifications specs = dataSnapshot.getValue(Specifications.class);
+                if (specs != null) {
+                    displaySpecifications(specs);
+                } else {
+                    specsTxt.setText("Không có thông số kỹ thuật.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(DetailActivity.this, "Failed to load specifications.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Display specifications in the TextView
+    private void displaySpecifications(Specifications specs) {
+        String specsText = "CPU: " + specs.getCPU() + "\n" +
+                "RAM: " + specs.getRAM() + "\n" +
+                "Ổ cứng: " + specs.getSSD() + "\n" +
+                "Card đồ họa: " + specs.getVGA() + "\n" +
+                "Màn hình: " + specs.getLCD();
+        specsTxt.setText(specsText);
     }
 }

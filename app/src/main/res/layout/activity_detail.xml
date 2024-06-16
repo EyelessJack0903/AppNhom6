@@ -30,7 +30,6 @@
                     android:layout_height="300dp"
                     android:background="#E9EFEF"
                     android:scaleType="centerCrop"
-
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -136,6 +135,36 @@
                 android:text="Xem thêm"
                 android:textColor="@color/material_dynamic_primary60"
                 android:textSize="16sp" />
+
+            <!-- Technical Specifications Section -->
+            <TextView
+                android:id="@+id/specsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Thông số kỹ thuật"
+                android:textColor="@color/material_dynamic_tertiary30"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:id="@+id/specsTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CPU: AMD Ryzen 7 5800H\nRAM: 16GB\nỔ cứng: 512GB SSD\nCard đồ họa: NVIDIA GeForce RTX 3050\nMàn hình: 14 inch, 2.8K (2880 x 1800)"
+                    android:textColor="@color/material_dynamic_neutral_variant50"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
