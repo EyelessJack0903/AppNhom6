@@ -2,15 +2,14 @@ package com.example.myapplaptop.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivitySignupBinding;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
@@ -28,13 +27,23 @@ public class SignupActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        setVariable();
+        setVariables();
     }
 
-    private void setVariable() {
+    private void setVariables() {
         binding.SignUpBtn.setOnClickListener(v -> {
             String email = binding.userEdit.getText().toString().trim();
             String password = binding.passEdit.getText().toString().trim();
+
+            if (TextUtils.isEmpty(email)) {
+                Toast.makeText(SignupActivity.this, "Please enter email address", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(password)) {
+                Toast.makeText(SignupActivity.this, "Please enter password", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (password.length() < 6) {
                 Toast.makeText(SignupActivity.this, "Your password must be at least 6 characters", Toast.LENGTH_SHORT).show();
@@ -55,6 +64,11 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 }
             });
+        });
+
+        // Handling click on "Are you a member? Login"
+        binding.nextLogin.setOnClickListener(v -> {
+            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
         });
     }
 }

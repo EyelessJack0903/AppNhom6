@@ -49,6 +49,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.updatePasword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, UpdatePasswordActivity.class));
+            }
+        });
 
         initLaptops();
         initCategory();
@@ -74,7 +80,6 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
 
     private void initBestLaptop() {
         DatabaseReference myRef = database.getReference("sanpham");
@@ -174,7 +179,7 @@ public class MainActivity extends BaseActivity {
 
                     ArrayAdapter<Type> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.locationSp.setAdapter(adapter);
+                    binding.typeSp.setAdapter(adapter);
                 }
             }
 
@@ -205,7 +210,7 @@ public class MainActivity extends BaseActivity {
 
                     ArrayAdapter<Category> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.timeSp.setAdapter(adapter);
+                    binding.brandSp.setAdapter(adapter);
                 }
             }
 
@@ -236,7 +241,7 @@ public class MainActivity extends BaseActivity {
 
                     ArrayAdapter<Model> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.priceSp.setAdapter(adapter);
+                    binding.modelSp.setAdapter(adapter);
                 }
             }
 

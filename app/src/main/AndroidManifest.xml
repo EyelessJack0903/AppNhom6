@@ -39,6 +39,8 @@
         <activity
             android:name=".Activity.IntroActivity"
             android:exported="true" />
+
+        <activity android:name=".Activity.UpdatePasswordActivity" />
     </application>
 
 </manifest>

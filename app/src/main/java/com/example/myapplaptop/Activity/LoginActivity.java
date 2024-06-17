@@ -1,25 +1,19 @@
+// LoginActivity.java
 package com.example.myapplaptop.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivityLoginBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends BaseActivity {
-    ActivityLoginBinding binding;
+public class LoginActivity extends AppCompatActivity {
+    private ActivityLoginBinding binding;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +21,42 @@ public class LoginActivity extends BaseActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setVariable();
+        // Initialize FirebaseAuth instance
+        mAuth = FirebaseAuth.getInstance();
 
+        setVariables();
     }
 
-    private void setVariable() {
-        binding.LoginBtn.setOnClickListener(v -> {
-            String email=binding.userEdit.getText().toString();
-            String password=binding.passEdit.getText().toString();
-            if (!email.isEmpty() && !password.isEmpty()){
-                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, task -> {
-                    if (task.isSuccessful()){
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }else {
-                Toast.makeText(LoginActivity.this, "Please fill username and password", Toast.LENGTH_SHORT).show();
+    private void setVariables() {
+        // Set click listener for Sign Up TextView
+        binding.textView14.setOnClickListener(view -> {
+            // Start SignupActivity
+            startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+        });
+
+        // Set click listener for Login Button
+        binding.LoginBtn.setOnClickListener(view -> {
+            String email = binding.userEdit.getText().toString().trim();
+            String password = binding.passEdit.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // Authenticate user with Firebase
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(LoginActivity.this, task -> {
+                        if (task.isSuccessful()) {
+                            // Login successful, navigate to MainActivity
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish(); // Close LoginActivity
+                        } else {
+                            // Login failed, display error message
+                            Toast.makeText(LoginActivity.this, "Authentication failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 }
