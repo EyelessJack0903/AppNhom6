@@ -36,31 +36,31 @@ public class SignupActivity extends AppCompatActivity {
             String password = binding.passEdit.getText().toString().trim();
 
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(SignupActivity.this, "Please enter email address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignupActivity.this, "Hãy điền email", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (TextUtils.isEmpty(password)) {
-                Toast.makeText(SignupActivity.this, "Please enter password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignupActivity.this, "Hãy điền password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (password.length() < 6) {
-                Toast.makeText(SignupActivity.this, "Your password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignupActivity.this, "Password của bạn phải đủ 6 kí tự trở lên", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignupActivity.this, task -> {
                 if (task.isSuccessful()) {
-                    Log.i(TAG, "onComplete: User registration successful");
+                    Log.i(TAG, "Đăng ký thành công");
                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                     finish();
                 } else {
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                        Toast.makeText(SignupActivity.this, "User with this email already exists.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "Email đã có, vui lòng chọn email khác.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.e(TAG, "failure: " + task.getException());
-                        Toast.makeText(SignupActivity.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Lỗi: " + task.getException());
+                        Toast.makeText(SignupActivity.this, "Lỗi đăng nhập: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

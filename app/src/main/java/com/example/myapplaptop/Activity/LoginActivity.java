@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = binding.passEdit.getText().toString().trim();
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(LoginActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Hãy điền đầy đủ các thông tin!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                             finish(); // Close LoginActivity
                         } else {
                             // Login failed, display error message
-                            Toast.makeText(LoginActivity.this, "Authentication failed",
+                            Toast.makeText(LoginActivity.this, "Sai tài khoản hoặc mật khẩu, vui lòng thử lại!",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });

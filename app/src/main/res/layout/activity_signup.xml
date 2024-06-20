@@ -76,7 +76,8 @@
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="text"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:inputType="textPassword"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/SignUpBtn"
@@ -95,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Are you a member? Login"
+                android:text="Bạn đã có tài khoản? Đăng nhập"
                 android:textAlignment="center"
                 android:textColor="#F44336"
                 android:textSize="20sp" />
