@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 
 import com.example.myapplaptop.Activity.Domain.Laptops;
-import com.example.myapplaptop.Laptops;
 
 import java.util.ArrayList;
 
@@ -30,28 +29,28 @@ public class ManagmentCart {
                 break;
             }
         }
-        if(existAlready){
+        if (existAlready) {
             listpop.get(n).setNumberInCart(item.getNumberInCart());
-        }else{
+        } else {
             listpop.add(item);
         }
         tinyDB.putListObject("CartList",listpop);
         Toast.makeText(context, "Added to your Cart", Toast.LENGTH_SHORT).show();
     }
 
-    public ArrayList<Foods> getListCart() {
+    public ArrayList<Laptops> getListCart() {
         return tinyDB.getListObject("CartList");
     }
 
     public Double getTotalFee(){
-        ArrayList<Foods> listItem=getListCart();
+        ArrayList<Laptops> listItem=getListCart();
         double fee=0;
         for (int i = 0; i < listItem.size(); i++) {
             fee=fee+(listItem.get(i).getPrice()*listItem.get(i).getNumberInCart());
         }
         return fee;
     }
-    public void minusNumberItem(ArrayList<Foods> listItem,int position,ChangeNumberItemsListener changeNumberItemsListener){
+    public void minusNumberItem(ArrayList<Laptops> listItem, int position, ChangeNumberItemsListener changeNumberItemsListener){
         if(listItem.get(position).getNumberInCart()==1){
             listItem.remove(position);
         }else{
@@ -60,7 +59,7 @@ public class ManagmentCart {
         tinyDB.putListObject("CartList",listItem);
         changeNumberItemsListener.change();
     }
-    public  void plusNumberItem(ArrayList<Foods> listItem,int position,ChangeNumberItemsListener changeNumberItemsListener){
+    public  void plusNumberItem(ArrayList<Laptops> listItem,int position,ChangeNumberItemsListener changeNumberItemsListener){
         listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart()+1);
         tinyDB.putListObject("CartList",listItem);
         changeNumberItemsListener.change();

@@ -16,6 +16,8 @@ public class Laptops implements Serializable {
     private double Star;
     private boolean BestLaptop;
 
+    private int NumberInCart;
+
     @Override
     public String toString() {
         return Name;
@@ -110,5 +112,13 @@ public class Laptops implements Serializable {
 
     public void setBestLaptop(boolean bestLaptop) {
         BestLaptop = bestLaptop;
+    }
+
+    public int getNumberInCart() {
+        return NumberInCart;
+    }
+
+    public void setNumberInCart(int numberInCart) {
+        NumberInCart = numberInCart;
     }
 }
