@@ -1,6 +1,7 @@
 package com.example.myapplaptop.Activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.Activity.Domain.Specifications;
+import com.example.myapplaptop.Activity.Helper.ManagmentCart;
 import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivityDetailBinding;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.concurrent.ForkJoinPool;
 
 public class DetailActivity extends BaseActivity {
     ActivityDetailBinding binding;
@@ -29,7 +32,7 @@ public class DetailActivity extends BaseActivity {
     private int num = 1;
     private int quantity = 1;
     private TextView numTxt, totalAmountTxt, descriptionTxt, toggleButton, specsTxt;
-
+    private ManagmentCart managmentCart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void setVariable() {
+        managmentCart= new ManagmentCart(this);
         binding.backBtn.setOnClickListener(v -> finish());
 
         Glide.with(DetailActivity.this)
@@ -87,6 +91,26 @@ public class DetailActivity extends BaseActivity {
         binding.rateTxt.setText(object.getStar() + " Rating");
         binding.ratingBar.setRating((float) object.getStar());
         binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
+        binding.textView6.setOnClickListener(v -> {
+            num=num+1;
+            binding.numTxt.setText(num+" ");
+            binding.totalTxt.setText("$"+(num* object.getPrice()));
+        });
+        binding.minusBtn.setOnClickListener(v -> {
+            if(num>1){
+                num=num-1;
+                binding.numTxt.setText(num+"");
+                binding.totalTxt.setText("$"+(num*object.getPrice()));
+            }
+        });
+
+        binding.addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                object.setNumberInCart(num);
+                managmentCart.insertFood(object);
+            }
+        });
     }
 
     private void getIntentExtra() {
