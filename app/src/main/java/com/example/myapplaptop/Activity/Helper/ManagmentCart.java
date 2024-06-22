@@ -1,67 +1,84 @@
 package com.example.myapplaptop.Activity.Helper;
 
 import android.content.Context;
-import android.widget.Toast;
-
-
+import android.content.SharedPreferences;
 import com.example.myapplaptop.Activity.Domain.Laptops;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-
 public class ManagmentCart {
+    private static final String SHARED_PREF_NAME = "cart_pref";
+    private static final String CART_KEY = "cart_key";
+
     private Context context;
-    private TinyDB tinyDB;
 
     public ManagmentCart(Context context) {
         this.context = context;
-        this.tinyDB=new TinyDB(context);
     }
 
-    public void insertFood(Laptops item) {
-        ArrayList<Laptops> listpop = getListCart();
-        boolean existAlready = false;
-        int n = 0;
-        for (int i = 0; i < listpop.size(); i++) {
-            if (listpop.get(i).getName().equals(item.getName())) {
-                existAlready = true;
-                n = i;
-                break;
+    // Lấy danh sách giỏ hàng từ SharedPreferences
+    public ArrayList<Laptops> getListCart() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(CART_KEY, null);
+        Type type = new TypeToken<ArrayList<Laptops>>() {}.getType();
+        return new Gson().fromJson(json, type);
+    }
+
+    // Lưu danh sách giỏ hàng vào SharedPreferences
+    private void saveListCart(ArrayList<Laptops> list) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String json = new Gson().toJson(list);
+        editor.putString(CART_KEY, json);
+        editor.apply();
+    }
+
+    // Thêm sản phẩm vào giỏ hàng
+    public void insertLaptop(Laptops laptop) {
+        ArrayList<Laptops> cart = getListCart();
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+        cart.add(laptop);
+        saveListCart(cart);
+    }
+
+    // Tăng số lượng sản phẩm trong giỏ hàng
+    public void plusNumberItem(ArrayList<Laptops> cart, int position, ChangeNumberItemsListener listener) {
+        Laptops laptop = cart.get(position);
+        laptop.setNumberInCart(laptop.getNumberInCart() + 1);
+        cart.set(position, laptop);
+        saveListCart(cart);
+        if (listener != null) {
+            listener.change();
+        }
+    }
+
+    // Giảm số lượng sản phẩm trong giỏ hàng
+    public void minusNumberItem(ArrayList<Laptops> cart, int position, ChangeNumberItemsListener listener) {
+        Laptops laptop = cart.get(position);
+        int currentQuantity = laptop.getNumberInCart();
+        if (currentQuantity > 1) {
+            laptop.setNumberInCart(currentQuantity - 1);
+            cart.set(position, laptop);
+            saveListCart(cart);
+            if (listener != null) {
+                listener.change();
             }
         }
-        if (existAlready) {
-            listpop.get(n).setNumberInCart(item.getNumberInCart());
-        } else {
-            listpop.add(item);
-        }
-        tinyDB.putListObject("CartList",listpop);
-        Toast.makeText(context, "Added to your Cart", Toast.LENGTH_SHORT).show();
     }
 
-    public ArrayList<Laptops> getListCart() {
-        return tinyDB.getListObject("CartList");
-    }
-
-    public Double getTotalFee(){
-        ArrayList<Laptops> listItem=getListCart();
-        double fee=0;
-        for (int i = 0; i < listItem.size(); i++) {
-            fee=fee+(listItem.get(i).getPrice()*listItem.get(i).getNumberInCart());
+    // Tính tổng chi phí của giỏ hàng
+    public double getTotalFee() {
+        double total = 0;
+        ArrayList<Laptops> cart = getListCart();
+        if (cart != null) {
+            for (Laptops laptop : cart) {
+                total += laptop.getPrice() * laptop.getNumberInCart();
+            }
         }
-        return fee;
-    }
-    public void minusNumberItem(ArrayList<Laptops> listItem, int position, ChangeNumberItemsListener changeNumberItemsListener){
-        if(listItem.get(position).getNumberInCart()==1){
-            listItem.remove(position);
-        }else{
-            listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart()-1);
-        }
-        tinyDB.putListObject("CartList",listItem);
-        changeNumberItemsListener.change();
-    }
-    public  void plusNumberItem(ArrayList<Laptops> listItem,int position,ChangeNumberItemsListener changeNumberItemsListener){
-        listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart()+1);
-        tinyDB.putListObject("CartList",listItem);
-        changeNumberItemsListener.change();
+        return total;
     }
 }

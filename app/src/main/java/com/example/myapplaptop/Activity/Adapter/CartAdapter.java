@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -17,48 +15,62 @@ import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.Activity.Helper.ChangeNumberItemsListener;
 import com.example.myapplaptop.Activity.Helper.ManagmentCart;
 import com.example.myapplaptop.R;
-
-import org.checkerframework.checker.units.qual.C;
-
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
-    ArrayList<Laptops> list;
+public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
+
+    private ArrayList<Laptops> list;
     private ManagmentCart managmentCart;
-    ChangeNumberItemsListener changeNumberItemsListener;
+    private ChangeNumberItemsListener changeNumberItemsListener;
+    private Context context;
 
     public CartAdapter(ArrayList<Laptops> list, Context context, ChangeNumberItemsListener changeNumberItemsListener) {
         this.list = list;
-        managmentCart = new ManagmentCart(context);
+        this.context = context;
         this.changeNumberItemsListener = changeNumberItemsListener;
+        managmentCart = new ManagmentCart(context);
     }
 
     @NonNull
     @Override
-    public CartAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflate= LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_cart,parent,false);
-        return new viewholder(inflate);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_cart, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CartAdapter.viewholder holder, int position) {
-        holder.title.setText(list.get(position).getName());
-        holder.feeEachItem.setText("$"+(list.get(position).getNumberInCart()* list.get(position).getPrice()));
-        holder.totalEachItem.setText(list.get(position).getNumberInCart()+" * $"+(
-                list.get(position).getPrice()));
-        holder.num.setText(list.get(position).getNumberInCart()+"");
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Laptops laptop = list.get(position);
+
+        holder.title.setText(laptop.getName());
+
         Glide.with(holder.itemView.getContext())
-                .load(list.get(position).getImage())
+                .load(laptop.getImage())
                 .transform(new CenterCrop(), new RoundedCorners(30))
                 .into(holder.pic);
-        holder.plusItem.setOnClickListener(v -> managmentCart.plusNumberItem(list, position, () -> {
-            notifyDataSetChanged();
-            changeNumberItemsListener.change();
-        }));
-        holder.minusItem.setOnClickListener(v -> managmentCart.minusNumberItem(list, position, () -> {
-            notifyDataSetChanged();
-            changeNumberItemsListener.change();
-        }));
+
+        holder.num.setText(String.valueOf(laptop.getNumberInCart()));
+
+        double fee = laptop.getNumberInCart() * laptop.getPrice();
+        holder.feeEachItem.setText(formatCurrency(fee));
+
+        holder.totalEachItem.setText(String.format("%d * %s", laptop.getNumberInCart(), formatCurrency(fee)));
+
+        holder.plusItem.setOnClickListener(v -> {
+            managmentCart.plusNumberItem(list, position, () -> {
+                notifyDataSetChanged();
+                changeNumberItemsListener.change();
+            });
+        });
+
+        holder.minusItem.setOnClickListener(v -> {
+            managmentCart.minusNumberItem(list, position, () -> {
+                notifyDataSetChanged();
+                changeNumberItemsListener.change();
+            });
+        });
     }
 
     @Override
@@ -66,20 +78,26 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
         return list.size();
     }
 
-    public class viewholder extends RecyclerView.ViewHolder{
-        TextView title, feeEachItem, plusItem, minusItem;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView title, feeEachItem, plusItem, minusItem, totalEachItem, num;
         ImageView pic;
-        TextView totalEachItem,num;
 
-        public viewholder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.titleTxt);
-            pic = itemView.findViewById(R.id.pic);
             feeEachItem = itemView.findViewById(R.id.feeEachItem);
             plusItem = itemView.findViewById(R.id.plusCartBtn);
             minusItem = itemView.findViewById(R.id.minusCartBtn);
             totalEachItem = itemView.findViewById(R.id.totalEachItem);
             num = itemView.findViewById(R.id.numberItemTxt);
+            pic = itemView.findViewById(R.id.pic);
         }
+    }
+
+    // Phương thức để định dạng số tiền thành chuỗi có dấu phân cách ngàn và ký hiệu tiền tệ
+    private String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        return currencyVN.format(amount);
     }
 }

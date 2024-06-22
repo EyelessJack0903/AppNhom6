@@ -1,6 +1,7 @@
 package com.example.myapplaptop.Activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +92,7 @@ public class DetailActivity extends BaseActivity {
         binding.rateTxt.setText(object.getStar() + " Rating");
         binding.ratingBar.setRating((float) object.getStar());
         binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
+
         binding.textView6.setOnClickListener(v -> {
             num=num+1;
             binding.numTxt.setText(num+" ");
@@ -108,7 +110,7 @@ public class DetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 object.setNumberInCart(num);
-                managmentCart.insertFood(object);
+                managmentCart.insertLaptop(object);
             }
         });
     }
@@ -138,6 +140,9 @@ public class DetailActivity extends BaseActivity {
 
     // Add product to cart
     private void addToCart() {
+        object.setNumberInCart(quantity);
+        managmentCart.insertLaptop(object);
+        Log.d("CartDebug", "Sản phẩm đã được thêm vào giỏ hàng: " + object.getName());
         Toast.makeText(this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
     }
 

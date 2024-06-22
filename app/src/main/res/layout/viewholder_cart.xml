@@ -68,6 +68,7 @@
             <TextView
                 android:id="@+id/numberItemTxt"
                 android:layout_width="24dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/blue_grey"

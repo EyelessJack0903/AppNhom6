@@ -115,6 +115,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/grey_background"
                     android:padding="12dp"
+                    android:onClick="openCartActivity"
                     android:src="@drawable/basket" />
             </LinearLayout>
 

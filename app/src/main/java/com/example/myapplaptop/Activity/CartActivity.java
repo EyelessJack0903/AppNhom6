@@ -2,26 +2,24 @@ package com.example.myapplaptop.Activity;
 
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.myapplaptop.Activity.Adapter.CartAdapter;
 import com.example.myapplaptop.Activity.Helper.ChangeNumberItemsListener;
 import com.example.myapplaptop.Activity.Helper.ManagmentCart;
-import com.example.myapplaptop.R;
+import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.databinding.ActivityCartBinding;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class CartActivity extends BaseActivity {
-private ActivityCartBinding binding;
-private RecyclerView.Adapter adapter;
-private ManagmentCart managmentCart;
-private double tax;
+
+    private ActivityCartBinding binding;
+    private RecyclerView.Adapter adapter;
+    private ManagmentCart managmentCart;
+    private double deliveryFee = 100000; // Phí giao hàng là 100,000 VNĐ
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,37 +28,39 @@ private double tax;
         setContentView(binding.getRoot());
         managmentCart = new ManagmentCart(this);
         setVariable();
-        calculateCart();
         initList();
+        calculateCart();
     }
 
     private void initList() {
-        if(managmentCart.getListCart().isEmpty()){
+        adapter = new CartAdapter(managmentCart.getListCart(), this, () -> calculateCart());
+        binding.cartView.setLayoutManager(new LinearLayoutManager(this));
+        binding.cartView.setAdapter(adapter);
+
+        if (managmentCart.getListCart().isEmpty()) {
             binding.emptyTxt.setVisibility(View.VISIBLE);
             binding.scrollviewCart.setVisibility(View.GONE);
-        }else {
+        } else {
             binding.emptyTxt.setVisibility(View.GONE);
             binding.scrollviewCart.setVisibility(View.VISIBLE);
         }
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        binding.cartView.setLayoutManager(linearLayoutManager);
-        adapter = new CartAdapter(managmentCart.getListCart(), this, () -> calculateCart());
-        binding.cartView.setAdapter(adapter);
     }
 
     private void calculateCart() {
-        double persentTax = 0.02; //Percent 2% tax
-        double delivery = 10; // 10 Dollar
-        tax = Math.round(managmentCart.getTotalFee()*persentTax*100.0)/100;
-        double total = Math.round((managmentCart.getTotalFee()+tax+delivery)*100)/100;
-        double itemTotal=Math.round(managmentCart.getTotalFee()*100)/100;
-        binding.totalFeeTxt.setText("$"+itemTotal);
-        binding.taxTxt.setText("$"+tax);
-        binding.deliveryTxt.setText("$"+delivery);
-        binding.totalTxt.setText("$"+total);
+        double total = managmentCart.getTotalFee() + deliveryFee;
+        binding.totalFeeTxt.setText(formatCurrency(managmentCart.getTotalFee()));
+        binding.deliveryTxt.setText(formatCurrency(deliveryFee));
+        binding.totalTxt.setText(formatCurrency(total));
     }
 
     private void setVariable() {
-        binding.backBtn.setOnClickListener(v -> finish());
+        binding.backBtn.setOnClickListener(v -> finish()); // Kết thúc CartActivity khi click vào backBtn
+    }
+
+    // Phương thức để định dạng số tiền thành chuỗi có dấu phân cách ngàn và ký hiệu tiền tệ
+    private String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        return currencyVN.format(amount);
     }
 }
