@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="cartIdTextView" type="id" />
+    <item name="fullNameTextView" type="id" />
+    <item name="phoneTextView" type="id" />
+    <item name="addressTextView" type="id" />
+    <item name="laptopsTextView" type="id" />
+    <item name="totalPriceTextView" type="id" />
+    <item name="recyclerView" type="id" />
+</resources>

@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+
         initLaptops();
         initCategory();
         initModel();

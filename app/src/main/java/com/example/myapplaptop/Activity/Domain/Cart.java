@@ -1,6 +1,7 @@
 package com.example.myapplaptop.Activity.Domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class Cart {
 
@@ -13,6 +14,16 @@ public class Cart {
     private String Address;
     private String Name;
     private String SDT;
+
+    private List<DetailCart> detailCartList;
+
+    public List<DetailCart> getDetailCartList() {
+        return detailCartList;
+    }
+
+    public void setDetailCartList(List<DetailCart> detailCartList) {
+        this.detailCartList = detailCartList;
+    }
 
     public Cart () {}
 
@@ -92,7 +103,7 @@ public class Cart {
 
     @Override
     public String toString() {
-        return Address + SDT + Name;
+        return Name + SDT + Address;
     }
 
     public void setPaymentMethod(String name) {

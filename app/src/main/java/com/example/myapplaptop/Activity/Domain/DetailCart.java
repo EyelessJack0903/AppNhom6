@@ -60,4 +60,11 @@ public class DetailCart {
     public void setPrice(double price) {
         Price = price;
     }
+
+    // Method to get laptop name based on ID_Laptop
+    public String getLaptopName() {
+        // Implement logic to fetch laptop name based on ID_Laptop
+        // This is just a placeholder method
+        return "Laptop Name"; // Replace with actual logic to fetch laptop name
+    }
 }
