@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -49,6 +50,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // Get the User UID from the Intent
+        String userUid = getIntent().getStringExtra("USER_UID");
+        if (userUid != null) {
+            Toast.makeText(MainActivity.this, "User UID: " + userUid, Toast.LENGTH_SHORT).show();
+        }
+
         binding.updatePasword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,13 +3,13 @@ package com.example.myapplaptop.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplaptop.databinding.ActivityLoginBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
@@ -48,9 +48,17 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(LoginActivity.this, task -> {
                         if (task.isSuccessful()) {
-                            // Login successful, navigate to MainActivity
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish(); // Close LoginActivity
+                            // Login successful
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                String uid = user.getUid();
+                                Toast.makeText(LoginActivity.this, "User UID: " + uid, Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("USER_UID", uid);
+                                startActivity(intent);
+                                finish(); // Close LoginActivity
+                            }
                         } else {
                             // Login failed, display error message
                             Toast.makeText(LoginActivity.this, "Sai tài khoản hoặc mật khẩu, vui lòng thử lại!",

@@ -62,7 +62,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/grey_background"
                     android:ems="10"
-                    android:hint="Enter Your Code"
+                    android:hint="Nhập code khuyến mãi (nếu có)"
                     android:inputType="text"
                     android:textAlignment="center"
                     android:textColor="@color/blue_grey"
@@ -75,7 +75,9 @@
                     android:layout_width="145dp"
                     android:layout_height="40dp"
                     android:background="@drawable/red_button_background2"
+                    android:backgroundTint="#2196F3"
                     android:text="Apply Coupon"
+                    android:textStyle="bold"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -84,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Order Summary"
+                android:text="Tạm tính"
                 android:textColor="@color/blue_grey"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -102,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="Tổng"
+                    android:text="Tiền laptop"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -172,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Total"
+                    android:text="Tổng tiền"
                     app:layout_constraintStart_toStartOf="@+id/textView16"
                     app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -191,15 +193,17 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button2"
+                android:id="@+id/orderBtn"
                 style="@android:style/Widget.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/red_button_background2"
-                android:text="Place Order"
+                android:backgroundTint="#009688"
+                android:text="Đặt hàng"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

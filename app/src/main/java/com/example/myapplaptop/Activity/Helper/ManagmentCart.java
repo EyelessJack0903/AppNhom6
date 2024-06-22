@@ -2,9 +2,11 @@ package com.example.myapplaptop.Activity.Helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -67,6 +69,12 @@ public class ManagmentCart {
             if (listener != null) {
                 listener.change();
             }
+        } else if (currentQuantity == 1) {
+            cart.remove(position);
+            saveListCart(cart);
+            if (listener != null) {
+                listener.change();
+            }
         }
     }
 
@@ -80,5 +88,10 @@ public class ManagmentCart {
             }
         }
         return total;
+    }
+
+    // Xóa giỏ hàng
+    public void clearCart() {
+        saveListCart(new ArrayList<>());
     }
 }
