@@ -56,7 +56,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         double fee = laptop.getNumberInCart() * laptop.getPrice();
         holder.feeEachItem.setText(formatCurrency(fee));
 
-        holder.totalEachItem.setText(String.format("%d * %s", laptop.getNumberInCart(), formatCurrency(fee)));
+        holder.totalEachItem.setText(String.format("%d x %s", laptop.getNumberInCart(), formatCurrency(fee)));
 
         holder.plusItem.setOnClickListener(v -> {
             managmentCart.plusNumberItem(list, position, () -> {
