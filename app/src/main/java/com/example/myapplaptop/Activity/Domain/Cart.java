@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Cart {
 
-    private String ID_Cart; // Thay đổi kiểu thành String
+    private String ID_Cart;
     private int ID_Payment;
-    private String ID_User; // Thay đổi kiểu thành String
+    private String ID_User;
     private double Total;
     private Date Date;
     private Date DateShip;

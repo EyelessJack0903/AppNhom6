@@ -2,8 +2,8 @@ package com.example.myapplaptop.Activity.Domain;
 
 public class DetailCart {
 
-    private String ID_Detail; // Thay đổi kiểu thành String
-    private String ID_Cart; // Thay đổi kiểu thành String
+    private String ID_Detail;
+    private String ID_Cart;
     private int ID_Laptop;
     private int Quantity;
     private double Total;
@@ -61,10 +61,7 @@ public class DetailCart {
         Price = price;
     }
 
-    // Method to get laptop name based on ID_Laptop
     public String getLaptopName() {
-        // Implement logic to fetch laptop name based on ID_Laptop
-        // This is just a placeholder method
-        return "Laptop Name"; // Replace with actual logic to fetch laptop name
+        return "Laptop Name";
     }
 }
