@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF"/>
+    <corners android:radius="50dp"/> <!-- Thay đổi 50% thành 50dp -->
+    <size android:width="50dp" android:height="50dp"/> <!-- Đảm bảo hình có kích thước vuông để tạo hình tròn -->
+</shape>

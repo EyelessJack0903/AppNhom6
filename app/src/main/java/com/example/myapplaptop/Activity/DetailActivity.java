@@ -1,8 +1,6 @@
 package com.example.myapplaptop.Activity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,11 +8,13 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplaptop.Activity.Adapter.SuggestedProductsAdapter;
 import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.Activity.Domain.Specifications;
-import com.example.myapplaptop.Activity.Helper.ManagmentCart;
 import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivityDetailBinding;
 import com.google.firebase.database.DataSnapshot;
@@ -24,16 +24,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ForkJoinPool;
 
 public class DetailActivity extends BaseActivity {
     ActivityDetailBinding binding;
     private Laptops object;
     private int num = 1;
-    private int quantity = 1;
+    private int quantity = 0;
     private TextView numTxt, totalAmountTxt, descriptionTxt, toggleButton, specsTxt;
-    private ManagmentCart managmentCart;
+    private RecyclerView suggestedProductsRecyclerView;
+    private SuggestedProductsAdapter suggestedProductsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +44,12 @@ public class DetailActivity extends BaseActivity {
         setContentView(R.layout.activity_detail); // Set content view
         getWindow().setStatusBarColor(getResources().getColor(R.color.black));
 
-        // Initialize binding object after setContentView
         binding = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot()); // Set binding root as content view
 
         getIntentExtra();
         setVariable();
 
-        // Enable edge-to-edge layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -61,6 +62,7 @@ public class DetailActivity extends BaseActivity {
         descriptionTxt = findViewById(R.id.descriptionTxt);
         toggleButton = findViewById(R.id.toggleButton);
         specsTxt = findViewById(R.id.specsTxt);
+        suggestedProductsRecyclerView = findViewById(R.id.suggestedProductsRecyclerView);
 
         // Set initial quantity text
         numTxt.setText(String.valueOf(quantity));
@@ -76,10 +78,13 @@ public class DetailActivity extends BaseActivity {
 
         // Fetch and display technical specifications
         fetchSpecifications();
+
+        // Initialize suggested products
+        initSuggestedProducts();
+        fetchSuggestedProducts();
     }
 
     private void setVariable() {
-        managmentCart= new ManagmentCart(this);
         binding.backBtn.setOnClickListener(v -> finish());
 
         Glide.with(DetailActivity.this)
@@ -89,30 +94,7 @@ public class DetailActivity extends BaseActivity {
         binding.priceText.setText(formatCurrency(object.getPrice()));
         binding.titleTxt.setText(object.getName());
         binding.descriptionTxt.setText(object.getDescription());
-        binding.rateTxt.setText(object.getStar() + " Rating");
-        binding.ratingBar.setRating((float) object.getStar());
         binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
-
-        binding.textView6.setOnClickListener(v -> {
-            num=num+1;
-            binding.numTxt.setText(num+" ");
-            binding.totalTxt.setText("$"+(num* object.getPrice()));
-        });
-        binding.minusBtn.setOnClickListener(v -> {
-            if(num>1){
-                num=num-1;
-                binding.numTxt.setText(num+"");
-                binding.totalTxt.setText("$"+(num*object.getPrice()));
-            }
-        });
-
-        binding.addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                object.setNumberInCart(num);
-                managmentCart.insertLaptop(object);
-            }
-        });
     }
 
     private void getIntentExtra() {
@@ -140,9 +122,6 @@ public class DetailActivity extends BaseActivity {
 
     // Add product to cart
     private void addToCart() {
-        object.setNumberInCart(quantity);
-        managmentCart.insertLaptop(object);
-        Log.d("CartDebug", "Sản phẩm đã được thêm vào giỏ hàng: " + object.getName());
         Toast.makeText(this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
     }
 
@@ -194,5 +173,37 @@ public class DetailActivity extends BaseActivity {
                 "Card đồ họa: " + specs.getVGA() + "\n" +
                 "Màn hình: " + specs.getLCD();
         specsTxt.setText(specsText);
+    }
+
+    // Initialize suggested products
+    private void initSuggestedProducts() {
+        suggestedProductsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        suggestedProductsAdapter = new SuggestedProductsAdapter(new ArrayList<>());
+        suggestedProductsRecyclerView.setAdapter(suggestedProductsAdapter);
+    }
+
+    // Fetch suggested products from Firebase
+    private void fetchSuggestedProducts() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference productsRef = database.getReference("suggested_products");
+
+        productsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Laptops> suggestedProducts = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Laptops laptop = snapshot.getValue(Laptops.class);
+                    if (laptop != null) {
+                        suggestedProducts.add(laptop);
+                    }
+                }
+                suggestedProductsAdapter.updateProducts(suggestedProducts);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(DetailActivity.this, "Failed to load suggested products.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
