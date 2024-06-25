@@ -2,4 +2,9 @@
 <resources>
     <item name="cartIdTextView" type="id" />
     <item name="recyclerView" type="id" />
+    <item name="textViewIDCart" type="id" />
+    <item name="textViewName" type="id" />
+    <item name="textViewSDT" type="id" />
+    <item name="textViewAddress" type="id" />
+    <item name="textViewDetail" type="id" />
 </resources>

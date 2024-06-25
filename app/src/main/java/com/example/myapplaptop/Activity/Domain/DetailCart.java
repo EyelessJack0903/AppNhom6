@@ -1,5 +1,11 @@
 package com.example.myapplaptop.Activity.Domain;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class DetailCart {
 
     private String ID_Detail;
@@ -8,10 +14,9 @@ public class DetailCart {
     private int Quantity;
     private double Total;
     private double Price;
+    private String LaptopName;
 
     public DetailCart() {}
-
-    // Getters và Setters cho các thuộc tính
 
     public String getID_Detail() {
         return ID_Detail;
@@ -62,6 +67,28 @@ public class DetailCart {
     }
 
     public String getLaptopName() {
-        return "Laptop Name";
+        return LaptopName;
+    }
+
+    public void setLaptopName(String laptopName) {
+        LaptopName = laptopName;
+    }
+
+    public void fetchLaptopName() {
+        DatabaseReference laptopRef = FirebaseDatabase.getInstance().getReference("Laptops").child(String.valueOf(ID_Laptop));
+        laptopRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Laptops laptop = dataSnapshot.getValue(Laptops.class);
+                if (laptop != null) {
+                    LaptopName = laptop.getName();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors
+            }
+        });
     }
 }

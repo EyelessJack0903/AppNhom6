@@ -44,8 +44,7 @@
             android:exported="true" />
         <activity android:name=".Activity.UpdatePasswordActivity" />
         <activity android:name=".Activity.UserInfoActivity" />
-        <activity android:name=".Activity.Adapter.OrderListActivity" />
-
+        <activity android:name=".Activity.OrderListActivity"/>
     </application>
 
 </manifest>

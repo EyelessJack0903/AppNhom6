@@ -62,14 +62,46 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, UpdatePasswordActivity.class));
             }
         });
-
+        binding.orderItem.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, OrderListActivity.class)));
 
         initLaptops();
         initCategory();
-        initModel();
         initBestLaptop();
         initBrand();
         setVariable();
+        initModel();
+    }
+
+
+    private void initModel() {
+        DatabaseReference myRef = database.getReference("model");
+        ArrayList<Model> list = new ArrayList<>();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot issue: snapshot.getChildren()){
+                        list.add(issue.getValue(Model.class));
+                    }
+                    // Sắp xếp list theo tên (tên của Model)
+                    Collections.sort(list, new Comparator<Model>() {
+                        @Override
+                        public int compare(Model model1, Model model2) {
+                            return model1.getName().compareTo(model2.getName());
+                        }
+                    });
+
+                    ArrayAdapter<Model> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    binding.modelSp.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Xử lý khi có lỗi
+            }
+        });
     }
 
     private void setVariable() {
@@ -231,35 +263,5 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void initModel() {
-        DatabaseReference myRef = database.getReference("model");
-        ArrayList<Model> list = new ArrayList<>();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot issue: snapshot.getChildren()){
-                        list.add(issue.getValue(Model.class));
-                    }
-                    // Sắp xếp list theo tên (tên của Model)
-                    Collections.sort(list, new Comparator<Model>() {
-                        @Override
-                        public int compare(Model model1, Model model2) {
-                            return model1.getName().compareTo(model2.getName());
-                        }
-                    });
-
-                    ArrayAdapter<Model> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.modelSp.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý khi có lỗi
-            }
-        });
-    }
 
 }

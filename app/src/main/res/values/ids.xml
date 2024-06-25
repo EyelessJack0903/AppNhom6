@@ -7,4 +7,9 @@
     <item name="laptopsTextView" type="id" />
     <item name="totalPriceTextView" type="id" />
     <item name="recyclerView" type="id" />
+    <item name="textViewIDCart" type="id" />
+    <item name="textViewName" type="id" />
+    <item name="textViewSDT" type="id" />
+    <item name="textViewAddress" type="id" />
+    <item name="textViewDetail" type="id" />
 </resources>
