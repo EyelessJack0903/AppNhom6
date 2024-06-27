@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Laptops implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private int ID_Laptop;
     private int ID_LM;
     private int ID_MD;
@@ -15,13 +17,14 @@ public class Laptops implements Serializable {
     private int Quantity;
     private double Star;
     private boolean BestLaptop;
+    private int NumberInCart;
 
     @Override
     public String toString() {
         return Name;
     }
-    public Laptops(){
 
+    public Laptops() {
     }
 
     public int getID_Laptop() {
@@ -110,5 +113,13 @@ public class Laptops implements Serializable {
 
     public void setBestLaptop(boolean bestLaptop) {
         BestLaptop = bestLaptop;
+    }
+
+    public int getNumberInCart() {
+        return NumberInCart;
+    }
+
+    public void setNumberInCart(int numberInCart) {
+        NumberInCart = numberInCart;
     }
 }

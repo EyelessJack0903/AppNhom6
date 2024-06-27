@@ -24,13 +24,16 @@ import java.util.Locale;
 import java.util.Map;
 
 public class LaptopListAdapter extends RecyclerView.Adapter<LaptopListAdapter.ViewHolder> {
+
     private ArrayList<Laptops> items;
     private Context context;
     private Map<Integer, String> brandNameMap;
+    private Map<Integer, String> modelNameMap; // Add modelNameMap for model names
 
-    public LaptopListAdapter(ArrayList<Laptops> items, Map<Integer, String> brandNameMap) {
+    public LaptopListAdapter(ArrayList<Laptops> items, Map<Integer, String> brandNameMap, Map<Integer, String> modelNameMap) {
         this.items = items;
         this.brandNameMap = brandNameMap;
+        this.modelNameMap = modelNameMap;
     }
 
     @NonNull
@@ -44,29 +47,37 @@ public class LaptopListAdapter extends RecyclerView.Adapter<LaptopListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Laptops laptop = items.get(position);
+
+        // Set laptop name
         holder.titleTxt.setText(laptop.getName());
+
+        // Set brand name using ID_TH from brandNameMap
         holder.brandTxt.setText(brandNameMap.get(laptop.getID_TH()));
+
+        // Set model name using ID_MD from modelNameMap
+        holder.modelTxt.setText(modelNameMap.get(laptop.getID_MD()));
 
         // Format the price
         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         String formattedPrice = formatter.format(laptop.getPrice());
         holder.priceTxt.setText(formattedPrice);
 
+        // Set star rating
         holder.rateTxt.setText(String.valueOf(laptop.getStar()));
 
+        // Load image using Glide with rounded corners
         Glide.with(context)
                 .load(laptop.getImage())
                 .transform(new CenterCrop(), new RoundedCorners(30))
                 .into(holder.pic);
 
+        // Set click listener to open DetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("object",items.get(position));
+            intent.putExtra("object", items.get(position));
             context.startActivity(intent);
-
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -74,16 +85,16 @@ public class LaptopListAdapter extends RecyclerView.Adapter<LaptopListAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView titleTxt, priceTxt, rateTxt, brandTxt;
+        TextView titleTxt, priceTxt, rateTxt, brandTxt, modelTxt;
         ImageView pic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             titleTxt = itemView.findViewById(R.id.titleTxt);
             priceTxt = itemView.findViewById(R.id.priceTxt);
             rateTxt = itemView.findViewById(R.id.rateTxt);
-            brandTxt = itemView.findViewById(R.id.brandTxt);
+            brandTxt = itemView.findViewById(R.id.modelTxt);
+            modelTxt = itemView.findViewById(R.id.MDtxt);
             pic = itemView.findViewById(R.id.img);
         }
     }

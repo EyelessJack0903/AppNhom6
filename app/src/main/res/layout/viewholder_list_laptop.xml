@@ -43,7 +43,20 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/brandTxt"
+                android:id="@+id/MDtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="brand"
+                android:textColor="#009688"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/modelTxt"
+                app:layout_constraintTop_toBottomOf="@+id/titleTxt"
+                tools:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/modelTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -51,7 +64,8 @@
                 android:textColor="#03A9F4"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/titleTxt"
-                app:layout_constraintTop_toBottomOf="@+id/titleTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/titleTxt"
+                tools:textStyle="bold" />
 
             <TextView
                 android:id="@+id/priceTxt"
@@ -64,8 +78,8 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/brandTxt"
-                app:layout_constraintTop_toBottomOf="@+id/brandTxt"
+                app:layout_constraintStart_toStartOf="@+id/modelTxt"
+                app:layout_constraintTop_toBottomOf="@+id/modelTxt"
                 app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
@@ -75,7 +89,7 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/priceTxt"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/brandTxt"
+                app:layout_constraintTop_toBottomOf="@+id/modelTxt"
                 android:src="@android:drawable/btn_star_big_on" />
 
             <TextView

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class UpdatePasswordActivity extends AppCompatActivity {
     private EditText oldPasswordEdt, newPasswordEdt, confirmPasswordEdt;
     private Button updatePasswordBtn;
     private ImageView goBack;
+    private TextView uidTextView;
     private FirebaseAuth mAuth;
 
     @Override
@@ -37,6 +39,14 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         confirmPasswordEdt = findViewById(R.id.comfirmnewPassword);
         updatePasswordBtn = findViewById(R.id.updatePasswordBtn);
         goBack = findViewById(R.id.goBack);
+        uidTextView = findViewById(R.id.UID);
+
+        // Hiển thị UID của người dùng hiện tại
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            uidTextView.setText("User UID: " + uid);
+        }
 
         // Xử lý sự kiện khi người dùng click vào nút cập nhật mật khẩu
         updatePasswordBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,25 +73,25 @@ public class UpdatePasswordActivity extends AppCompatActivity {
 
         // Kiểm tra các trường nhập liệu
         if (oldPassword.isEmpty()) {
-            oldPasswordEdt.setError("Enter old password");
+            oldPasswordEdt.setError("Nhập password cũ");
             oldPasswordEdt.requestFocus();
             return;
         }
 
         if (newPassword.isEmpty()) {
-            newPasswordEdt.setError("Enter new password");
+            newPasswordEdt.setError("Nhập password mới");
             newPasswordEdt.requestFocus();
             return;
         }
 
         if (confirmPassword.isEmpty()) {
-            confirmPasswordEdt.setError("Confirm new password");
+            confirmPasswordEdt.setError("Xác nhận password mới");
             confirmPasswordEdt.requestFocus();
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            confirmPasswordEdt.setError("Passwords do not match");
+            confirmPasswordEdt.setError("Password thay đổi không trùng khớp, vui lòng kiểm tra lại!");
             confirmPasswordEdt.requestFocus();
             return;
         }
@@ -95,10 +105,10 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(UpdatePasswordActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdatePasswordActivity.this, "Password thay đổi thành công", Toast.LENGTH_SHORT).show();
                             finish(); // Kết thúc hoạt động và quay lại trang trước đó
                         } else {
-                            Toast.makeText(UpdatePasswordActivity.this, "Failed to update password: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdatePasswordActivity.this, "Password thay đổi thất bại, vui lòng thử lại!: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -1,5 +1,6 @@
 package com.example.myapplaptop.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplaptop.Activity.Adapter.LaptopListAdapter;
 import com.example.myapplaptop.Activity.Domain.Laptops;
-import com.example.myapplaptop.R;
+import com.example.myapplaptop.Activity.Domain.Model;
 import com.example.myapplaptop.databinding.ActivityListLaptopsBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,13 +31,14 @@ public class ListLaptopsActivity extends BaseActivity {
     private String searchText;
     private boolean isSearch;
     private FirebaseDatabase database;
-    private DatabaseReference myRef;
+    private DatabaseReference brandRef;
+    private DatabaseReference modelRef;
     private Map<Integer, String> brandNameMap = new HashMap<>();
+    private Map<Integer, String> modelNameMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityListLaptopsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -44,81 +46,69 @@ public class ListLaptopsActivity extends BaseActivity {
 
         getIntentExtra();
         initBrandNames();
-        setVariable();
-    }
-
-    private void setVariable() {
-
     }
 
     private void initBrandNames() {
-        myRef = database.getReference("thuonghieu");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        brandRef = database.getReference("thuonghieu");
+        brandRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot issue : snapshot.getChildren()) {
-                    int brandId = issue.child("ID_TH").getValue(Integer.class);
-                    String brandName = issue.child("Name").getValue(String.class);
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    int brandId = dataSnapshot.child("ID_TH").getValue(Integer.class);
+                    String brandName = dataSnapshot.child("Name").getValue(String.class);
                     brandNameMap.put(brandId, brandName);
+                }
+                initModelNames();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+
+    private void initModelNames() {
+        modelRef = database.getReference("model");
+        modelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    int modelId = dataSnapshot.child("ID_MD").getValue(Integer.class);
+                    String modelName = dataSnapshot.child("Name").getValue(String.class);
+                    modelNameMap.put(modelId, modelName);
                 }
                 initList();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Handle error
             }
         });
     }
 
     private void initList() {
-        myRef = database.getReference("sanpham");
-        binding.progressBar.setVisibility(View.VISIBLE);
-        ArrayList<Laptops> list = new ArrayList<>();
-
+        DatabaseReference laptopRef = database.getReference("sanpham");
         Query query;
         if (isSearch) {
-            // Handle search query
-            ArrayList<Laptops> caseInsensitiveList = new ArrayList<>();
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        for (DataSnapshot issue : snapshot.getChildren()) {
-                            Laptops laptop = issue.getValue(Laptops.class);
-                            if (laptop != null && laptop.getName().toLowerCase().contains(searchText)) {
-                                caseInsensitiveList.add(laptop);
-                            }
-                        }
-                        if (!caseInsensitiveList.isEmpty()) {
-                            showRecyclerView(caseInsensitiveList);
-                        } else {
-                            showNoProductMessage();
-                        }
-                    } else {
-                        showNoProductMessage();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle error
-                }
-            });
-            return;
+            query = laptopRef.orderByChild("Name").startAt(searchText).endAt(searchText + "\uf8ff");
         } else {
-            query = myRef.orderByChild("ID_TH").equalTo(ID_TH);
+            query = laptopRef.orderByChild("ID_TH").equalTo(ID_TH);
         }
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Laptops> laptopsList = new ArrayList<>();
                 if (snapshot.exists()) {
-                    for (DataSnapshot issue : snapshot.getChildren()) {
-                        list.add(issue.getValue(Laptops.class));
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Laptops laptop = dataSnapshot.getValue(Laptops.class);
+                        if (laptop != null) {
+                            laptopsList.add(laptop);
+                        }
                     }
-                    if (!list.isEmpty()) {
-                        showRecyclerView(list);
+                    if (!laptopsList.isEmpty()) {
+                        showRecyclerView(laptopsList);
                     } else {
                         showNoProductMessage();
                     }
@@ -135,20 +125,19 @@ public class ListLaptopsActivity extends BaseActivity {
     }
 
     private void showRecyclerView(ArrayList<Laptops> dataList) {
+        binding.progressBar.setVisibility(View.GONE);
         binding.laptopViewList.setVisibility(View.VISIBLE);
         binding.noProductText.setVisibility(View.GONE);
-        binding.laptopViewList.setLayoutManager(new GridLayoutManager(ListLaptopsActivity.this, 2));
-        adapterListLaptop = new LaptopListAdapter(dataList, brandNameMap);
+        binding.laptopViewList.setLayoutManager(new GridLayoutManager(this, 2));
+        adapterListLaptop = new LaptopListAdapter(dataList, brandNameMap, modelNameMap);
         binding.laptopViewList.setAdapter(adapterListLaptop);
-        binding.progressBar.setVisibility(View.GONE);
     }
 
     private void showNoProductMessage() {
+        binding.progressBar.setVisibility(View.GONE);
         binding.laptopViewList.setVisibility(View.GONE);
         binding.noProductText.setVisibility(View.VISIBLE);
-        binding.progressBar.setVisibility(View.GONE);
     }
-
 
     private void getIntentExtra() {
         ID_TH = getIntent().getIntExtra("ID_TH", 0);

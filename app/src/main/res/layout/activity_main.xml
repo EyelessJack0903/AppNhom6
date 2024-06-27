@@ -64,13 +64,13 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/filterBtn"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/orderItem"
+                    android:layout_width="62dp"
                     android:layout_height="50dp"
                     android:layout_marginEnd="6dp"
-                    android:padding="12dp"
                     android:background="@drawable/grey_background"
-                    android:src="@drawable/settings" />
+                    android:padding="12dp"
+                    android:src="@drawable/aaa" />
 
                 <LinearLayout
                     android:id="@+id/layout"
@@ -115,6 +115,7 @@
                     android:layout_marginStart="6dp"
                     android:background="@drawable/grey_background"
                     android:padding="12dp"
+                    android:onClick="openCartActivity"
                     android:src="@drawable/basket" />
             </LinearLayout>
 
@@ -143,11 +144,11 @@
 
                         <ImageView
                             android:id="@+id/imageView6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="21dp"
+                            android:layout_height="22dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
-                            android:src="@drawable/location" />
+                            android:src="@drawable/stars" />
 
                         <Spinner
                             android:id="@+id/typeSp"
@@ -157,16 +158,6 @@
                             android:layout_weight="1"
                             android:background="@null" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/TypeFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Lọc"
-                        android:textColor="@color/blue_grey"
-                        android:textStyle="bold"
-                        android:textSize="14dp" />
 
                 </LinearLayout>
 
@@ -187,11 +178,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="21dp"
+                            android:layout_height="22dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
-                            android:src="@drawable/time" />
+                            android:src="@drawable/stars" />
 
                         <Spinner
                             android:id="@+id/brandSp"
@@ -201,16 +192,6 @@
                             android:layout_weight="1"
                             android:background="@null" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/brandFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Lọc"
-                        android:textColor="@color/blue_grey"
-                        android:textStyle="bold"
-                        android:textSize="14dp" />
 
                 </LinearLayout>
 
@@ -230,11 +211,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="21dp"
+                            android:layout_height="22dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
-                            android:src="@drawable/dollar" />
+                            android:src="@drawable/stars" />
 
                         <Spinner
                             android:id="@+id/modelSp"
@@ -244,16 +225,6 @@
                             android:layout_weight="1"
                             android:background="@null" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/modelFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Lọc"
-                        android:textColor="@color/blue_grey"
-                        android:textStyle="bold"
-                        android:textSize="14dp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -282,7 +253,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/red"
-                    android:text="VIEW ALL" />
+                    android:text="" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
