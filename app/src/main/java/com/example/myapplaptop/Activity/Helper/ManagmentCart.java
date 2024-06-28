@@ -24,6 +24,9 @@ public class ManagmentCart {
     public ArrayList<Laptops> getListCart() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String json = sharedPreferences.getString(CART_KEY, null);
+        if (json == null) {
+            return new ArrayList<>(); // Trả về danh sách rỗng nếu chưa có dữ liệu trong SharedPreferences
+        }
         Type type = new TypeToken<ArrayList<Laptops>>() {}.getType();
         return new Gson().fromJson(json, type);
     }
@@ -44,7 +47,7 @@ public class ManagmentCart {
             cart = new ArrayList<>();
         }
         cart.add(laptop);
-        saveListCart(cart);
+        saveListCart(cart); // Lưu danh sách giỏ hàng vào SharedPreferences
     }
 
     // Tăng số lượng sản phẩm trong giỏ hàng
