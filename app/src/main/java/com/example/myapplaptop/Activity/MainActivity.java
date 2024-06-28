@@ -110,6 +110,7 @@ public class MainActivity extends BaseActivity {
         binding.logoutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(MainActivity.this, IntroActivity.class));
+            
         });
 
         binding.searchBtn.setOnClickListener(v -> {

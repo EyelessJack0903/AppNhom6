@@ -148,12 +148,12 @@
                     android:layout_weight="1"
                     app:srcCompat="@drawable/google" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/facebookLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/facebook"/>
+                    app:srcCompat="@drawable/facebook" />
 
             </LinearLayout>
 
