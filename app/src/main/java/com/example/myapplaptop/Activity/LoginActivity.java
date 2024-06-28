@@ -56,9 +56,18 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setTitle("Creating account");
         progressDialog.setMessage("we are creating your account");
 
+        /*signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(GoogleIdTokenRequestOptions.builder()
+            .setSupported(true)
+            .setServerClientId(getString(R.string.default_web_client_id))
+            .setFilterByAuthorizedAccounts(true)
+            .build())
+    .build();*/
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                //truyền server client ID
                 .requestIdToken(getString(R.string.default_web_client_id))
+                //show email người dùng
                 .requestEmail()
                 .build();
 
