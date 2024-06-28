@@ -87,24 +87,22 @@ public class ListLaptopsActivity extends BaseActivity {
             }
         });
     }
-
     private void initList() {
         DatabaseReference laptopRef = database.getReference("sanpham");
-        Query query;
-        if (isSearch) {
-            query = laptopRef.orderByChild("Name").startAt(searchText).endAt(searchText + "\uf8ff");
-        } else {
-            query = laptopRef.orderByChild("ID_TH").equalTo(ID_TH);
-        }
+        Query query = laptopRef.orderByChild("Name");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Laptops> laptopsList = new ArrayList<>();
                 if (snapshot.exists()) {
+                    String searchTextLower = searchText.toLowerCase(); // Chuyển searchText thành chữ thường
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Laptops laptop = dataSnapshot.getValue(Laptops.class);
                         if (laptop != null) {
-                            laptopsList.add(laptop);
+                            // Kiểm tra xem Name của sản phẩm có chứa searchTextLower
+                            if (laptop.getName().toLowerCase().contains(searchTextLower)) {
+                                laptopsList.add(laptop);
+                            }
                         }
                     }
                     if (!laptopsList.isEmpty()) {
@@ -119,7 +117,7 @@ public class ListLaptopsActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
+                // Xử lý khi có lỗi
             }
         });
     }
@@ -140,6 +138,7 @@ public class ListLaptopsActivity extends BaseActivity {
     }
 
     private void getIntentExtra() {
+        // Lấy các dữ liệu từ Intent
         ID_TH = getIntent().getIntExtra("ID_TH", 0);
         Name = getIntent().getStringExtra("Name");
         searchText = getIntent().getStringExtra("text");
@@ -147,5 +146,8 @@ public class ListLaptopsActivity extends BaseActivity {
 
         binding.titleTxt.setText(Name);
         binding.backBtn.setOnClickListener(v -> finish());
+
+        // Gọi hàm initList() khi Intent được nhận và các dữ liệu đã được lấy
+        initList();
     }
 }
