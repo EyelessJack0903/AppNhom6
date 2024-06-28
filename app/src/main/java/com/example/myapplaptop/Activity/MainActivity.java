@@ -25,6 +25,7 @@ import com.example.myapplaptop.Activity.Domain.Model;
 import com.example.myapplaptop.Activity.Domain.Type;
 import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivityMainBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +45,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,7 @@ public class MainActivity extends BaseActivity {
         binding.logoutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(MainActivity.this, IntroActivity.class));
+            
         });
 
         binding.searchBtn.setOnClickListener(v -> {

@@ -140,19 +140,20 @@
                 android:layout_margin="32dp"
                 android:orientation="horizontal" >
 
-                <ImageView
+
+                <ImageButton
                     android:id="@+id/gmailLogin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/google" />
+                    app:srcCompat="@drawable/google" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/facebookLogin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/facebook" />
+                    app:srcCompat="@drawable/facebook" />
 
             </LinearLayout>
 

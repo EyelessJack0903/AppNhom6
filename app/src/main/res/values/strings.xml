@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MyAppLaptop</string>
+
+    //857137016464046
+
+    <string name="facebook_app_id">905069168007536</string>
+    <string name="fb_login_protocol_scheme">fb905069168007536</string>
+    <string name="facebook_client_token">21015ea97dc729e389f85b822b585c28</string>
+
 </resources>
