@@ -7,4 +7,7 @@
     <string name="fb_login_protocol_scheme">fb905069168007536</string>
     <string name="facebook_client_token">21015ea97dc729e389f85b822b585c28</string>
 
+    <string name="product_image_description">Image of the product</string>
+    <string name="product_title">Laptop Acer Predator Helios 300</string>
+    <string name="product_price">27.600.000 đ</string>
 </resources>
