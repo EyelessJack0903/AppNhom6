@@ -1,11 +1,11 @@
 package com.example.myapplaptop.Activity.Domain;
 
 public class Payment {
-
     private int ID_Payment;
     private String Name;
 
     public Payment() {
+        // Default constructor required for Firebase
     }
 
     public int getID_Payment() {

@@ -10,4 +10,6 @@
     <string name="product_image_description">Image of the product</string>
     <string name="product_title">Laptop Acer Predator Helios 300</string>
     <string name="product_price">27.600.000 đ</string>
+
+    <string name="back_button">Back button</string>
 </resources>

@@ -96,6 +96,14 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 calculateTotalPrice(position);
+
+                // Lấy selected payment từ spinner
+                Payment selectedPayment = (Payment) parent.getItemAtPosition(position);
+
+                // Kiểm tra nếu ID_Payment là 4 thì hiển thị văn bản là "Thanh toán bằng tiền mặt"
+                if (selectedPayment.getID_Payment() == 4) {
+                    ((TextView) view).setText("Thanh toán bằng tiền mặt");
+                }
             }
 
             @Override
@@ -104,6 +112,7 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void calculateTotalPrice(int position) {
         double deliveryFee = 100000; // Assume delivery fee is constant
@@ -134,15 +143,22 @@ public class UserInfoActivity extends AppCompatActivity {
 
         Payment selectedPayment = (Payment) paymentSpinner.getSelectedItem();
 
+        // Lấy ID_Payment dưới dạng int từ selectedPayment
+        int idPayment = selectedPayment.getID_Payment();
+
+        // Lấy ngày giờ hiện tại
+        Date currentDate = new Date(); // Lấy ngày giờ hiện tại của thiết bị
+
         Cart cart = new Cart();
         cart.setID_User(userId);
         cart.setID_Cart(cartId);
-        cart.setDate(new Date());
+        cart.setDate(currentDate); // Set ngày giờ hiện tại
         cart.setTotal(managmentCart.getTotalFee());
         cart.setName(name);
         cart.setSDT(phone);
         cart.setAddress(address);
         cart.setPaymentMethod(selectedPayment.getName()); // Set selected payment method
+        cart.setID_Payment(idPayment); // Set ID_Payment
 
         databaseReference.child("cart").child(cartId).setValue(cart);
 
@@ -157,6 +173,7 @@ public class UserInfoActivity extends AppCompatActivity {
             detailCart.setQuantity(laptop.getNumberInCart());
             detailCart.setPrice(laptop.getPrice());
             detailCart.setTotal(laptop.getPrice() * laptop.getNumberInCart());
+            detailCart.setId_User(userId); // Đặt giá trị id_User vào detailCart
 
             databaseReference.child("detail_cart").child(detailId).setValue(detailCart);
         }

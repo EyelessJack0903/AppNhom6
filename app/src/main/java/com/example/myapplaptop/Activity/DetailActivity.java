@@ -1,5 +1,6 @@
 package com.example.myapplaptop.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -116,8 +117,13 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void setVariable() {
-        managmentCart= new ManagmentCart(this);
-        binding.backBtn.setOnClickListener(v -> finish());
+        managmentCart = new ManagmentCart(this);
+        binding.backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
 
         Glide.with(DetailActivity.this)
                 .load(object.getImage())
@@ -129,26 +135,23 @@ public class DetailActivity extends BaseActivity {
         binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
 
         binding.textView6.setOnClickListener(v -> {
-            num=num+1;
-            binding.numTxt.setText(num+" ");
-            binding.totalTxt.setText("$"+(num* object.getPrice()));
+            num = num + 1;
+            binding.numTxt.setText(num + " ");
+            binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
         });
         binding.minusBtn.setOnClickListener(v -> {
-            if(num>1){
-                num=num-1;
-                binding.numTxt.setText(num+"");
-                binding.totalTxt.setText("$"+(num*object.getPrice()));
+            if (num > 1) {
+                num = num - 1;
+                binding.numTxt.setText(num + "");
+                binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
             }
         });
 
-        binding.addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                object.setNumberInCart(num);
-                managmentCart.insertLaptop(object);
-                Log.d("CartDebug", "Sản phẩm đã được thêm vào giỏ hàng: " + object.getName());
-                Toast.makeText(DetailActivity.this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
-            }
+        binding.addBtn.setOnClickListener(v -> {
+            object.setNumberInCart(num);
+            managmentCart.insertLaptop(object);
+            Log.d("CartDebug", "Sản phẩm đã được thêm vào giỏ hàng: " + object.getName());
+            Toast.makeText(DetailActivity.this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
         });
     }
 
