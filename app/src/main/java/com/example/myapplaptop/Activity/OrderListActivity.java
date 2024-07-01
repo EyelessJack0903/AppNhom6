@@ -17,7 +17,6 @@ import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,9 +61,6 @@ public class OrderListActivity extends AppCompatActivity {
 
         // Load dữ liệu đơn hàng từ Firebase
         loadOrdersFromFirebase();
-
-        // Lắng nghe sự kiện khi có dữ liệu mới được thêm vào detail_cart
-        listenForNewOrders();
     }
 
     private void loadOrdersFromFirebase() {
@@ -87,6 +83,7 @@ public class OrderListActivity extends AppCompatActivity {
                     DetailCart detailCart = snapshot.getValue(DetailCart.class);
                     if (detailCart != null) {
                         detailCart.setID_Detail(snapshot.getKey()); // Set ID_Detail
+                        detailCart.setID_Laptop(detailCart.getID_Laptop() - 1); // Trừ 1 cho ID_Laptop
                         detailCartList.add(detailCart);
                         loadProductInfo(detailCart);
                     }
@@ -111,7 +108,7 @@ public class OrderListActivity extends AppCompatActivity {
 
     private void loadProductInfo(final DetailCart detailCart) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("sanpham")
-                .child(String.valueOf(detailCart.getID_Laptop() - 1)); // Giảm giá trị ID_Laptop đi 1
+                .child(String.valueOf(detailCart.getID_Laptop())); // Đã trừ 1 cho ID_Laptop ở trên
 
         productRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -133,55 +130,6 @@ public class OrderListActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(OrderListActivity.this, "Failed to load product information: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void listenForNewOrders() {
-        DatabaseReference detailCartRef = FirebaseDatabase.getInstance().getReference("detail_cart");
-
-        // Sử dụng ChildEventListener để lắng nghe sự kiện khi có dữ liệu mới được thêm vào detail_cart
-        detailCartRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, String previousChildName) {
-                DetailCart detailCart = snapshot.getValue(DetailCart.class);
-                if (detailCart != null) {
-                    detailCart.setID_Detail(snapshot.getKey()); // Set ID_Detail
-                    detailCart.setID_Laptop(detailCart.getID_Laptop() - 1); // Giảm giá trị ID_Laptop đi 1
-
-                    // Kiểm tra null cho id_User trước khi so sánh
-                    if (detailCart.getId_User() != null && detailCart.getId_User().equals(currentUser.getUid())) {
-                        if (!detailCartList.contains(detailCart)) {
-                            detailCartList.add(detailCart);
-                            loadProductInfo(detailCart);
-                            orderListAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
-            }
-
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, String previousChildName) {
-                // Xử lý khi có sự thay đổi dữ liệu trong detail_cart
-                // Đây có thể là nơi bạn cập nhật lại dữ liệu khi có sự thay đổi
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                // Xử lý khi có dữ liệu trong detail_cart bị xóa
-                // Đây có thể là nơi bạn xóa dữ liệu khỏi danh sách khi bị xóa từ Firebase
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, String previousChildName) {
-                // Xử lý khi có sự di chuyển dữ liệu trong detail_cart
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle khi có lỗi xảy ra
-                Toast.makeText(OrderListActivity.this, "Failed to listen for new orders: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
