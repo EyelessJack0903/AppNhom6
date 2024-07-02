@@ -12,4 +12,15 @@
     <item name="textViewSDT" type="id" />
     <item name="textViewAddress" type="id" />
     <item name="textViewDetail" type="id" />
+    <item name="imageViewLaptop" type="id" />
+    <item name="textViewLaptopName" type="id" />
+    <item name="textViewQuantity" type="id" />
+    <item name="textViewTotalPrice" type="id" />
+    <item name="dialogTextViewPhone" type="id" />
+    <item name="dialogTextViewPaymentId" type="id" />
+    <item name="dialogTextViewTotalPrice" type="id" />
+    <item name="buttonClose" type="id" />
+    <item name="dialogTextViewAddress" type="id" />
+    <item name="dialogTextViewName" type="id" />
+    <item name="dialogTextViewOrderId" type="id" />
 </resources>

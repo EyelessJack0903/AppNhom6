@@ -48,7 +48,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         final DetailCart detailCart = mDetailCartList.get(position);
 
         // Display ID_Detail
-        holder.orderIdTextView.setText(detailCart.getID_Detail());
+        holder.orderIdTextView.setText("ID: " + detailCart.getID_Detail());
 
         // Retrieve data from 'sanpham' based on ID_Laptop
         DatabaseReference laptopRef = FirebaseDatabase.getInstance().getReference("sanpham")
@@ -154,7 +154,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         TextView txvSDT = dialogView.findViewById(R.id.txvSDT);
         TextView txvIDPayment = dialogView.findViewById(R.id.txvIDPayment);
 
-        txvName.setText("Họ tên khách hàng: " + name);
+        txvName.setText("Khách hàng: " + name);
         txvAddress.setText("Địa chỉ: " + address);
         txvSDT.setText("Số điện thoại: " + sdt);
 

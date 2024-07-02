@@ -14,9 +14,19 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Thông tin khách hàng"
+            android:textSize="18sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
             android:id="@+id/txvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Name: "
             android:textSize="16sp" />
 

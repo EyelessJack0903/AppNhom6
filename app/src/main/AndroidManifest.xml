@@ -51,6 +51,8 @@
         
         <activity android:name=".Activity.OrderListActivity" />
 
+        <activity android:name=".Activity.OrderActivity" />
+
         <activity android:name=".Activity.UserInfoActivity" />
 
         <activity android:name="com.facebook.FacebookActivity"

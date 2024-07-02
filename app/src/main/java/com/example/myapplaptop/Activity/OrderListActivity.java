@@ -3,6 +3,7 @@ package com.example.myapplaptop.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,6 +35,9 @@ public class OrderListActivity extends AppCompatActivity {
     private List<DetailCart> detailCartList;
     private ImageView backBtn;
 
+    private Button historyBTN;
+    private Button orderBTN;
+
     private FirebaseUser currentUser;
 
     @Override
@@ -48,12 +52,25 @@ public class OrderListActivity extends AppCompatActivity {
         recyclerView.setAdapter(orderListAdapter);
 
         backBtn = findViewById(R.id.backBtn);
+        historyBTN = findViewById(R.id.historyBTN);
+        orderBTN = findViewById(R.id.orderBTN);
 
         backBtn.setOnClickListener(v -> {
-            // Quay về màn hình chính (HomeActivity)
             Intent intent = new Intent(OrderListActivity.this, MainActivity.class);
             startActivity(intent);
-            finish(); // Kết thúc OrderListActivity sau khi quay lại HomeActivity
+            finish();
+        });
+
+        historyBTN.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderListActivity.this, OrderListActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        orderBTN.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderListActivity.this, OrderActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         // Lấy người dùng hiện tại từ Firebase Authentication
