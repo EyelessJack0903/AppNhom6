@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplaptop.Activity.Adapter.CartAdapter;
+import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.Activity.Helper.ManagmentCart;
 import com.example.myapplaptop.databinding.ActivityCartBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class CartActivity extends BaseActivity {
@@ -46,14 +48,16 @@ public class CartActivity extends BaseActivity {
     }
 
     private void initList() {
-        adapter = new CartAdapter(managmentCart.getListCart(), this, () -> calculateCart());
-        binding.cartView.setLayoutManager(new LinearLayoutManager(this));
-        binding.cartView.setAdapter(adapter);
-
-        if (managmentCart.getListCart().isEmpty()) {
+        // Kiểm tra và khởi tạo danh sách giỏ hàng nếu cần
+        ArrayList<Laptops> listCart = managmentCart.getListCart();
+        if (listCart == null || listCart.isEmpty()) {
             binding.emptyTxt.setVisibility(View.VISIBLE);
             binding.scrollviewCart.setVisibility(View.GONE);
         } else {
+            adapter = new CartAdapter(listCart, this, () -> calculateCart());
+            binding.cartView.setLayoutManager(new LinearLayoutManager(this));
+            binding.cartView.setAdapter(adapter);
+
             binding.emptyTxt.setVisibility(View.GONE);
             binding.scrollviewCart.setVisibility(View.VISIBLE);
         }

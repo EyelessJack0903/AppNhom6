@@ -1,41 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/pic"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="150dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/product_image_description"/>
 
         <TextView
             android:id="@+id/titleTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:textColor="#333333"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:layout_below="@id/pic"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:text="@string/product_title"/>
 
         <TextView
             android:id="@+id/priceTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#ff5722"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:fontFamily="serif"
+            android:layout_below="@id/titleTxt"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="4dp"
-            android:textColor="#d32f2f"
-            android:textSize="14sp" />
+            android:text="@string/product_price"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

@@ -1,10 +1,14 @@
 package com.example.myapplaptop.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.myapplaptop.Activity.Adapter.SuggestedProductsAdapter;
 import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.Activity.Domain.Specifications;
+import com.example.myapplaptop.Activity.Helper.ManagmentCart;
 import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivityDetailBinding;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +37,9 @@ public class DetailActivity extends BaseActivity {
     ActivityDetailBinding binding;
     private Laptops object;
     private int num = 1;
-    private int quantity = 0;
+    private int quantity = 1;
     private TextView numTxt, totalAmountTxt, descriptionTxt, toggleButton, specsTxt;
+    private ManagmentCart managmentCart;
     private RecyclerView suggestedProductsRecyclerView;
     private SuggestedProductsAdapter suggestedProductsAdapter;
 
@@ -44,12 +50,15 @@ public class DetailActivity extends BaseActivity {
         setContentView(R.layout.activity_detail); // Set content view
         getWindow().setStatusBarColor(getResources().getColor(R.color.black));
 
+        // Initialize binding object after setContentView
         binding = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot()); // Set binding root as content view
 
         getIntentExtra();
         setVariable();
+        setRecommend();
 
+        // Enable edge-to-edge layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -62,7 +71,7 @@ public class DetailActivity extends BaseActivity {
         descriptionTxt = findViewById(R.id.descriptionTxt);
         toggleButton = findViewById(R.id.toggleButton);
         specsTxt = findViewById(R.id.specsTxt);
-        suggestedProductsRecyclerView = findViewById(R.id.suggestedProductsRecyclerView);
+        suggestedProductsRecyclerView = findViewById(R.id.viewrecommend);
 
         // Set initial quantity text
         numTxt.setText(String.valueOf(quantity));
@@ -84,8 +93,37 @@ public class DetailActivity extends BaseActivity {
         fetchSuggestedProducts();
     }
 
+    private void setRecommend() {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("sanpham");
+        ArrayList<Laptops> list = new ArrayList<>();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot issue: snapshot.getChildren()){
+                        list.add(issue.getValue(Laptops.class));
+                    }
+                    // Khởi tạo Adapter và set cho RecyclerView
+                    binding.viewrecommend.setLayoutManager(new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL,false));
+                    RecyclerView.Adapter adapter = new SuggestedProductsAdapter(list);
+                    binding.viewrecommend.setAdapter(adapter);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(DetailActivity.this, "Failed to load recommended products.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void setVariable() {
-        binding.backBtn.setOnClickListener(v -> finish());
+        managmentCart = new ManagmentCart(this);
+        binding.backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
 
         Glide.with(DetailActivity.this)
                 .load(object.getImage())
@@ -95,6 +133,26 @@ public class DetailActivity extends BaseActivity {
         binding.titleTxt.setText(object.getName());
         binding.descriptionTxt.setText(object.getDescription());
         binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
+
+        binding.textView6.setOnClickListener(v -> {
+            num = num + 1;
+            binding.numTxt.setText(num + " ");
+            binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
+        });
+        binding.minusBtn.setOnClickListener(v -> {
+            if (num > 1) {
+                num = num - 1;
+                binding.numTxt.setText(num + "");
+                binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
+            }
+        });
+
+        binding.addBtn.setOnClickListener(v -> {
+            object.setNumberInCart(num);
+            managmentCart.insertLaptop(object);
+            Log.d("CartDebug", "Sản phẩm đã được thêm vào giỏ hàng: " + object.getName());
+            Toast.makeText(DetailActivity.this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void getIntentExtra() {
@@ -122,6 +180,9 @@ public class DetailActivity extends BaseActivity {
 
     // Add product to cart
     private void addToCart() {
+        object.setNumberInCart(quantity);
+        managmentCart.insertLaptop(object);
+        Log.d("CartDebug", "Sản phẩm đã được thêm vào giỏ hàng: " + object.getName());
         Toast.makeText(this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
     }
 
@@ -182,7 +243,6 @@ public class DetailActivity extends BaseActivity {
         suggestedProductsRecyclerView.setAdapter(suggestedProductsAdapter);
     }
 
-    // Fetch suggested products from Firebase
     private void fetchSuggestedProducts() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference productsRef = database.getReference("suggested_products");

@@ -17,6 +17,7 @@ import com.example.myapplaptop.Activity.Domain.Laptops;
 import com.example.myapplaptop.R;
 
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ public class SuggestedProductsAdapter extends RecyclerView.Adapter<SuggestedProd
 
     public SuggestedProductsAdapter(List<Laptops> laptopsList) {
         this.laptopsList = laptopsList;
+        shuffleProducts(); // Trộn danh sách sản phẩm khi khởi tạo adapter
     }
 
     @NonNull
@@ -59,12 +61,17 @@ public class SuggestedProductsAdapter extends RecyclerView.Adapter<SuggestedProd
 
     @Override
     public int getItemCount() {
-        return laptopsList.size();
+        return Math.min(laptopsList.size(), 5); // Giới hạn số lượng sản phẩm hiển thị tối đa là 5
     }
 
     public void updateProducts(List<Laptops> laptops) {
         this.laptopsList = laptops;
+        shuffleProducts(); // Trộn danh sách sản phẩm khi cập nhật
         notifyDataSetChanged();
+    }
+
+    private void shuffleProducts() {
+        Collections.shuffle(laptopsList); // Sử dụng phương thức Collections.shuffle() để trộn danh sách sản phẩm
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

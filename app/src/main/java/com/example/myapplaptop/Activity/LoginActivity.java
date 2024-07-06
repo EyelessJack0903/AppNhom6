@@ -26,7 +26,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-
+/*facebook*/
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
@@ -54,6 +56,13 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setTitle("Creating account");
         progressDialog.setMessage("we are creating your account");
 
+        /*signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(GoogleIdTokenRequestOptions.builder()
+            .setSupported(true)
+            .setServerClientId(getString(R.string.default_web_client_id))
+            .setFilterByAuthorizedAccounts(true)
+            .build())
+    .build();*/
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 //truyền server client ID

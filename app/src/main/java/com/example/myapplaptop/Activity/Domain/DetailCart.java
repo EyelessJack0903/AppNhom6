@@ -1,11 +1,5 @@
 package com.example.myapplaptop.Activity.Domain;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 public class DetailCart {
 
     private String ID_Detail;
@@ -15,11 +9,20 @@ public class DetailCart {
     private double Total;
     private double Price;
     private String LaptopName;
+    private String id_User;
 
     public DetailCart() {}
 
     public String getID_Detail() {
         return ID_Detail;
+    }
+
+    public String getId_User() {
+        return id_User;
+    }
+
+    public void setId_User(String id_User) {
+        this.id_User = id_User;
     }
 
     public void setID_Detail(String ID_Detail) {
@@ -72,23 +75,5 @@ public class DetailCart {
 
     public void setLaptopName(String laptopName) {
         LaptopName = laptopName;
-    }
-
-    public void fetchLaptopName() {
-        DatabaseReference laptopRef = FirebaseDatabase.getInstance().getReference("Laptops").child(String.valueOf(ID_Laptop));
-        laptopRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Laptops laptop = dataSnapshot.getValue(Laptops.class);
-                if (laptop != null) {
-                    LaptopName = laptop.getName();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors
-            }
-        });
     }
 }

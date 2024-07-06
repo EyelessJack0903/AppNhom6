@@ -48,7 +48,12 @@
             android:name=".Activity.IntroActivity"
             android:exported="true" />
         <activity android:name=".Activity.UpdatePasswordActivity" />
+        
+        <activity android:name=".Activity.OrderListActivity" />
 
+        <activity android:name=".Activity.OrderActivity" />
+
+        <activity android:name=".Activity.UserInfoActivity" />
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=

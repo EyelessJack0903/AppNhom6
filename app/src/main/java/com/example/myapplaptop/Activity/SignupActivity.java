@@ -12,6 +12,7 @@ import com.example.myapplaptop.R;
 import com.example.myapplaptop.databinding.ActivitySignupBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -53,14 +54,27 @@ public class SignupActivity extends AppCompatActivity {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignupActivity.this, task -> {
                 if (task.isSuccessful()) {
                     Log.i(TAG, "Đăng ký thành công");
-                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                    finish();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user != null) {
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(verifyTask -> {
+                                    if (verifyTask.isSuccessful()) {
+                                        Toast.makeText(SignupActivity.this, "Đăng ký thành công. Vui lòng xác minh email của bạn.", Toast.LENGTH_LONG).show();
+                                        mAuth.signOut();
+                                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                                        finish();
+                                    } else {
+                                        Log.e(TAG, "Gửi email xác minh thất bại", verifyTask.getException());
+                                        Toast.makeText(SignupActivity.this, "Gửi email xác minh thất bại.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
                 } else {
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Toast.makeText(SignupActivity.this, "Email đã có, vui lòng chọn email khác.", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.e(TAG, "Lỗi: " + task.getException());
-                        Toast.makeText(SignupActivity.this, "Lỗi đăng nhập: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

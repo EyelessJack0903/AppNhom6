@@ -1,11 +1,16 @@
 package com.example.myapplaptop.Activity.Domain;
 
 public class Payment {
-
     private int ID_Payment;
     private String Name;
 
-    public Payment() {
+    public Payment (){
+
+    }
+
+    public Payment(int ID_Payment, String Name) {
+        this.ID_Payment = ID_Payment;
+        this.Name = Name;
     }
 
     public int getID_Payment() {
