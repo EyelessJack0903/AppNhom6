@@ -94,13 +94,16 @@ public class OrderCartAdapter extends RecyclerView.Adapter<OrderCartAdapter.Orde
                     int idLaptop = dataSnapshot.child("id_Laptop").getValue(Integer.class);
                     int quantity = dataSnapshot.child("quantity").getValue(Integer.class);
 
-                    DatabaseReference laptopRef = FirebaseDatabase.getInstance().getReference("sanpham").child(String.valueOf(idLaptop));
+                    // Trừ đi 1 từ id_Laptop
+                    int adjustedIdLaptop = idLaptop - 1;
+
+                    DatabaseReference laptopRef = FirebaseDatabase.getInstance().getReference("sanpham").child(String.valueOf(adjustedIdLaptop));
                     laptopRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot laptopSnapshot) {
                             if (laptopSnapshot.exists()) {
                                 String laptopName = laptopSnapshot.child("Name").getValue(String.class);
-                                // Create a TextView dynamically for each product
+                                // Tạo một TextView động cho mỗi sản phẩm
                                 TextView productTextView = new TextView(context);
                                 productTextView.setLayoutParams(new LinearLayout.LayoutParams(
                                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -109,14 +112,14 @@ public class OrderCartAdapter extends RecyclerView.Adapter<OrderCartAdapter.Orde
                                 productTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                                 productTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
 
-                                // Add the TextView to the productsLayout
+                                // Thêm TextView vào productsLayout
                                 productsLayout.addView(productTextView);
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            // Handle error
+                            // Xử lý lỗi
                         }
                     });
                 }
@@ -124,7 +127,7 @@ public class OrderCartAdapter extends RecyclerView.Adapter<OrderCartAdapter.Orde
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
+                // Xử lý lỗi
             }
         });
 
@@ -132,6 +135,7 @@ public class OrderCartAdapter extends RecyclerView.Adapter<OrderCartAdapter.Orde
 
         dialog.show();
     }
+
     @Override
     public int getItemCount() {
         return cartList.size();
