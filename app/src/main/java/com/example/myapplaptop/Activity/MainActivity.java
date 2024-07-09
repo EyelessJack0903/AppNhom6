@@ -223,7 +223,8 @@ public class MainActivity extends BaseActivity {
                                         categoryList.add(issue.getValue(Category.class));
                                     }
                                     // Khởi tạo Adapter và set cho RecyclerView
-                                    binding.bestLaptopView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                                    binding.bestLaptopView.setLayoutManager(new LinearLayoutManager
+                                            (MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                                     RecyclerView.Adapter adapter = new LaptopBestChoice(list, categoryList);
                                     binding.bestLaptopView.setAdapter(adapter);
                                 }

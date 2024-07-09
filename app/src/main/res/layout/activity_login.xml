@@ -86,7 +86,7 @@
                 android:layout_marginTop="32dp"
                 android:text="Quên password? Ấn vào đây"
                 android:textAlignment="center"
-                android:textColor="#F44336"
+                android:textColor="#009688"
                 android:textSize="16sp"
                 android:textStyle="bold|italic" />
 

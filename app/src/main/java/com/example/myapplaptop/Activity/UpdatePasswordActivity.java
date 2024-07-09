@@ -1,5 +1,6 @@
 package com.example.myapplaptop.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -106,9 +107,14 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(UpdatePasswordActivity.this, "Password thay đổi thành công", Toast.LENGTH_SHORT).show();
-                            finish(); // Kết thúc hoạt động và quay lại trang trước đó
+                            // Chuyển sang LoginActivity và xóa các hoạt động trước đó
+                            Intent intent = new Intent(UpdatePasswordActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish(); // Kết thúc hoạt động hiện tại
                         } else {
-                            Toast.makeText(UpdatePasswordActivity.this, "Password thay đổi thất bại, vui lòng thử lại!: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdatePasswordActivity.this, "Password thay đổi thất bại, vui lòng thử lại!: " + task.getException()
+                                    .getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
